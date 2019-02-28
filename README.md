@@ -23,7 +23,9 @@ X-NUCLEO-IKS01A3 LSM6DSO accelerometer.
 6D Orientation and step events using the X-NUCLEO-IKS01A3 LSM6DSO accelerometer.
 * X_NUCLEO_IKS01A3_LSM6DSO_Pedometer: This application shows how to use X-NUCLEO-IKS01A3 LSM6DSO accelerometer 
 to count steps.
-* X_NUCLEO_IKS01A3_LSM6DSO_SingleDoubleTap: This application shows how to detect the single and double tap event using the 
+* X_NUCLEO_IKS01A3_LSM6DSO_SingleTap: This application shows how to detect the single tap event using the 
+X-NUCLEO-IKS01A3 LSM6DSO accelerometer.
+* X_NUCLEO_IKS01A3_LSM6DSO_DoubleTap: This application shows how to detect the double tap event using the 
 X-NUCLEO-IKS01A3 LSM6DSO accelerometer.
 * X_NUCLEO_IKS01A3_LSM6DSO_TiltDetection: This application shows how to detect the tilt event using the X-NUCLEO-IKS01A3 
 LSM6DSO accelerometer.

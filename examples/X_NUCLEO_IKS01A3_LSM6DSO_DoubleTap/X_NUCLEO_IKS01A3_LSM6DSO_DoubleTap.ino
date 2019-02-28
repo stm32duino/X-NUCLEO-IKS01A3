@@ -1,6 +1,6 @@
 /**
  ******************************************************************************
- * @file   X_NUCLEO_IKS01A3_LSM6DSO_SingleDoubleTap.ino
+ * @file   X_NUCLEO_IKS01A3_LSM6DSO_DoubleTap.ino
  * @author  SRA
  * @version V1.0.0
  * @date    February 2019
@@ -80,7 +80,6 @@ void setup() {
 
   accGyr = new LSM6DSOSensor (&DEV_I2C);
   accGyr->Enable_X();
-  accGyr->Enable_Single_Tap_Detection(LSM6DSO_INT1_PIN);
   accGyr->Enable_Double_Tap_Detection(LSM6DSO_INT1_PIN);
 }
 
@@ -90,15 +89,15 @@ void loop() {
     mems_event=0;
     LSM6DSO_Event_Status_t status;
     accGyr->Get_X_Event_Status(&status);
-    if (status.TapStatus)
-    {
-      // Output data.
-      SerialPort.println("Single Tap Detected!");
-    }
     if (status.DoubleTapStatus)
     {
       // Output data.
       SerialPort.println("Double Tap Detected!");
+
+      // Led blinking.
+      digitalWrite(LED_BUILTIN, HIGH);
+      delay(100);
+      digitalWrite(LED_BUILTIN, LOW);
     }
   }
 }
