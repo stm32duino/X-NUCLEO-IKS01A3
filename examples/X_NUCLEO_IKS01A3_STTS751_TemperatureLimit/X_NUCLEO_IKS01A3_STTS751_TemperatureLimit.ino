@@ -58,6 +58,10 @@
 //Interrupts.
 volatile int mems_event = 0;
 
+uint8_t high = 0, low = 0;
+uint32_t previous_tick;
+float temperature = 0;
+
 STTS751Sensor *Temp;
 
 void INT1Event_cb()
@@ -84,6 +88,8 @@ void setup() {
   Temp->SetHighTemperatureThreshold(28.0f);
   Temp->SetEventPin(1);
   Temp->GetTemperatureLimitStatus(NULL, NULL, NULL);
+
+  previous_tick=millis();
 }
 
 void loop() {
@@ -93,25 +99,36 @@ void loop() {
     uint8_t highTemp = 0, lowTemp = 0;
     Temp->GetTemperatureLimitStatus(&highTemp, &lowTemp, NULL);
     if (highTemp){
-      // Led blinking.
-      digitalWrite(LED_BUILTIN, HIGH);
-      delay(100);
-      digitalWrite(LED_BUILTIN, LOW);
-
-      SerialPort.print("High temperature detected!(>28C) ");
-  }
-    if (lowTemp){
-      // Led blinking.
-      digitalWrite(LED_BUILTIN, HIGH);
-      delay(100);
-      digitalWrite(LED_BUILTIN, LOW);
-
-      SerialPort.print("Low temperature detected!(<22C) ");
+      high = 1;
+      low = 0;
     }
-    float temperature = 0;
-  Temp->GetTemperature(&temperature);
-
-  SerialPort.print("Temp[C]: ");
-  SerialPort.println(temperature, 2);      
+    if (lowTemp){
+      low = 1;
+      high = 0;
+    }
+    
+    Temp->GetTemperature(&temperature);
+    // Led blinking.
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(100);
+    digitalWrite(LED_BUILTIN, LOW);   
+  }
+  uint32_t current_tick = millis();
+  if ((current_tick - previous_tick) >= 2000){
+    if (!high && !low){
+      Temp->GetTemperature(&temperature);
+    }
+    SerialPort.print("Temp[C]: ");
+    SerialPort.print(temperature, 2);
+    if (high){
+      SerialPort.println(" High temperature detected!(>28C) ");
+      high = 0;
+    } else if (low) {
+      SerialPort.println(" Low temperature detected!(<22C) ");
+      low = 0;
+    } else {
+      SerialPort.println();
+    }
+    previous_tick = millis();
   }
 }

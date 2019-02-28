@@ -54,6 +54,7 @@
 #define SerialPort Serial
 
 #define INT_1 4
+#define INT_2 5
 
 LSM6DSOSensor *accGyr;
 int32_t accelerometer[3];
@@ -66,6 +67,7 @@ uint16_t step_count = 0;
 char report[256];
 
 void INT1Event_cb();
+void INT2Event_cb();
 void sendOrientation();
 
 void setup() {
@@ -79,6 +81,7 @@ void setup() {
   
   //Interrupts.
   attachInterrupt(INT_1, INT1Event_cb, RISING);
+  attachInterrupt(INT_2, INT2Event_cb, RISING);
 
   accGyr = new LSM6DSOSensor (&DEV_I2C);
   accGyr->Enable_X();
@@ -88,6 +91,7 @@ void setup() {
   accGyr->Enable_Single_Tap_Detection(LSM6DSO_INT1_PIN);
   accGyr->Enable_Double_Tap_Detection(LSM6DSO_INT1_PIN);
   accGyr->Enable_6D_Orientation(LSM6DSO_INT1_PIN);
+  accGyr->Enable_Wake_Up_Detection(LSM6DSO_INT2_PIN);
 }
 
 void loop() {
@@ -133,10 +137,21 @@ void loop() {
       // Send 6D Orientation
       sendOrientation();
     }
+
+    if (status.WakeUpStatus)
+    {
+      // Output data.
+      SerialPort.println("Wake up Detected!");
+    }
   }
 }
 
 void INT1Event_cb()
+{
+  mems_event = 1;
+}
+
+void INT2Event_cb()
 {
   mems_event = 1;
 }

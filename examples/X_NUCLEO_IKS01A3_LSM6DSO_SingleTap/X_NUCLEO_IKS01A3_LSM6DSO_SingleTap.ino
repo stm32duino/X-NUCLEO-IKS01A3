@@ -1,6 +1,6 @@
 /**
  ******************************************************************************
- * @file   X_NUCLEO_IKS01A3_LSM6DSO_Pedometer.ino
+ * @file   X_NUCLEO_IKS01A3_LSM6DSO_SingleTap.ino
  * @author  SRA
  * @version V1.0.0
  * @date    February 2019
@@ -56,13 +56,13 @@
 #define INT_1 4
 
 LSM6DSOSensor *accGyr;
+int32_t accelerometer[3];
+int32_t gyroscope[3];
 
 //Interrupts.
 volatile int mems_event = 0;
 
-uint16_t step_count = 0;
 char report[256];
-uint32_t previous_tick;
 
 void INT1Event_cb();
 
@@ -80,9 +80,7 @@ void setup() {
 
   accGyr = new LSM6DSOSensor (&DEV_I2C);
   accGyr->Enable_X();
-  accGyr->Enable_Pedometer();
-
-  previous_tick = millis();
+  accGyr->Enable_Single_Tap_Detection(LSM6DSO_INT1_PIN);
 }
 
 void loop() {
@@ -91,12 +89,10 @@ void loop() {
     mems_event=0;
     LSM6DSO_Event_Status_t status;
     accGyr->Get_X_Event_Status(&status);
-    if (status.StepStatus)
+    if (status.TapStatus)
     {
-      // New step detected, so print the step counter
-      accGyr->Get_Step_Count(&step_count);
-      snprintf(report, sizeof(report), "Step counter: %d", step_count);
-      SerialPort.println(report);
+      // Output data.
+      SerialPort.println("Single Tap Detected!");
 
       // Led blinking.
       digitalWrite(LED_BUILTIN, HIGH);
@@ -104,16 +100,6 @@ void loop() {
       digitalWrite(LED_BUILTIN, LOW);
     }
   }
-  // Print the step counter in any case every 3000 ms
-  uint32_t current_tick = millis();
-  if((current_tick - previous_tick) >= 3000)
-  {
-    accGyr->Get_Step_Count(&step_count);
-    snprintf(report, sizeof(report), "Step counter: %d", step_count);
-    SerialPort.println(report);
-    previous_tick = millis();
-  }
-  
 }
 
 void INT1Event_cb()
