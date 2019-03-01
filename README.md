@@ -19,8 +19,6 @@ X-NUCLEO-IKS01A3 LIS2DW12 accelerometer.
 to find out the 6D orientation and display data on a hyperterminal.
 * X_NUCLEO_IKS01A3_LSM6DSO_FreeFallDetection: This application shows how to detect the free fall event using the 
 X-NUCLEO-IKS01A3 LSM6DSO accelerometer.
-* X_NUCLEO_IKS01A3_LSM6DSO_MultiEvent: This application shows how to detect free fall, tap, double tap, tilt, wake up,
-6D Orientation and step events using the X-NUCLEO-IKS01A3 LSM6DSO accelerometer.
 * X_NUCLEO_IKS01A3_LSM6DSO_Pedometer: This application shows how to use X-NUCLEO-IKS01A3 LSM6DSO accelerometer 
 to count steps.
 * X_NUCLEO_IKS01A3_LSM6DSO_SingleTap: This application shows how to detect the single tap event using the 
