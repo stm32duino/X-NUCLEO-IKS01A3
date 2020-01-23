@@ -116,19 +116,15 @@ void loop() {
   // Read accelerometer and gyroscope.
   int32_t accelerometer[3];
   int32_t gyroscope[3];
-  memset(accelerometer, 0, 3);
-  memset(gyroscope, 0, 3);
   AccGyr->Get_X_Axes(accelerometer);
   AccGyr->Get_G_Axes(gyroscope);
 
   //Read accelerometer
   int32_t accelerometer2[3];
-  memset(accelerometer2, 0, 3);
   Acc2->Get_X_Axes(accelerometer2);
 
   //Read magnetometer
   int32_t magnetometer[3];
-  memset(magnetometer, 0, 3);
   Mag->GetAxes(magnetometer);
 
   // Output data.
