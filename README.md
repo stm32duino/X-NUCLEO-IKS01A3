@@ -29,6 +29,8 @@ X-NUCLEO-IKS01A3 LSM6DSO accelerometer.
 LSM6DSO accelerometer.
 * X_NUCLEO_IKS01A3_LSM6DSO_WakeUpDetection: This application shows how to detect the wake-up event using the 
 X-NUCLEO-IKS01A3 LSM6DSO accelerometer.
+* X_NUCLEO_IKS01A3_LSM6DSOX_MLC: This application shows how to detect the activity using the MLC of 
+LSM6DSOX accelerometer. In order to use this application STEVAL-MKI197V1 board is needed connected to X-NUCLEO-IKS01A3 via DIL24 interface.
 * X_NUCLEO_IKS01A3_STTS751_TemeperatureLimit: This application shows how to detect low temperature and high temperature 
 events using the X-NUCLEO-IKS01A3 STTS751 temperature sensor.
 
@@ -42,6 +44,7 @@ The X-NUCLEO-IKS01A3 library requires the following STM32duino libraries:
 * STM32duino HTS221: https://github.com/stm32duino/HTS221
 * STM32duino LPS22HH: https://github.com/stm32duino/LPS22HH
 * STM32duino STTS751: https://github.com/stm32duino/STTS751
+* STM32duino LSM6DSOX: https://github.com/stm32duino/LSM6DSOX
 
 ## Documentation
 
