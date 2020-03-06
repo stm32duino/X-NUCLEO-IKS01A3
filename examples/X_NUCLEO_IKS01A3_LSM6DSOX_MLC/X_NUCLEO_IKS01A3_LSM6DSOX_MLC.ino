@@ -39,7 +39,7 @@
  */
 //NOTE: This example isn't compatible with Arduino Uno.
 //NOTE: For this example you need the STEVAL-MKI197V1 board connected to the DIL24 connector of the X-NUCLEO-IKS01A3.
-//NOTE: This application needs to put the pin A5 to GND through a wire in order to work properly.
+//NOTE: In order to work properly, this application needs to put the pin A5 to GND through a wire and put JP6 with pins 13 and 14 closed instead of pins 5 and 6.
 
 // Includes
 #include "LSM6DSOXSensor.h"
