@@ -38,7 +38,8 @@
  ******************************************************************************
  */
 //NOTE: This example isn't compatible with Arduino Uno.
-//NOTE: For this example you need the STEVAL-MKI197V1 board connected to the DIL24 connector of the X-NUCLEO-IKS01A3
+//NOTE: For this example you need the STEVAL-MKI197V1 board connected to the DIL24 connector of the X-NUCLEO-IKS01A3.
+//NOTE: This application needs to put the pin A5 to GND through a wire in order to work properly.
 
 // Includes
 #include "LSM6DSOXSensor.h"
@@ -55,7 +56,7 @@
 #endif
 #define SerialPort Serial
 
-#define INT_1 A5
+#define INT_2 2
 
 //Interrupts.
 volatile int mems_event = 0;
@@ -68,7 +69,7 @@ ucf_line_t *ProgramPointer;
 int32_t LineCounter;
 int32_t TotalNumberOfLine;
 
-void INT1Event_cb();
+void INT2Event_cb();
 
 void setup() {
   uint8_t mlc_out[8];
@@ -111,7 +112,7 @@ void setup() {
   SerialPort.println("Program loaded inside the LSM6DSOX MLC");
 
   //Interrupts.
-  attachInterrupt(INT_1, INT1Event_cb, RISING);
+  attachInterrupt(INT_2, INT2Event_cb, RISING);
 
   /* We need to wait for a time window before having the first MLC status */
   delay(3000);
@@ -171,6 +172,6 @@ void loop() {
   }
 }
 
-void INT1Event_cb() {
+void INT2Event_cb() {
   mems_event = 1;
 }
