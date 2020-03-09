@@ -75,6 +75,13 @@ void setup() {
   // Led.
   pinMode(LED_BUILTIN, OUTPUT);
 
+  // Force INT1 of LSM6DSOX low in order to enable I2C
+  pinMode(INT_1, OUTPUT);
+
+  DigitalWrite(INT_1, LOW);
+
+  delay(200);
+
   // Initialize serial for output.
   SerialPort.begin(115200);
   
@@ -111,6 +118,7 @@ void setup() {
   SerialPort.println("Program loaded inside the LSM6DSOX MLC");
 
   //Interrupts.
+  pinMode(INT_1, INPUT);
   attachInterrupt(INT_1, INT1Event_cb, RISING);
 
   /* We need to wait for a time window before having the first MLC status */
