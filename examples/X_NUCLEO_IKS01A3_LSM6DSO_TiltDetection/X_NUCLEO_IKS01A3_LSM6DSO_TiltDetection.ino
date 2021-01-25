@@ -55,7 +55,7 @@
 
 #define INT_1 4
 
-LSM6DSOSensor *accGyr;
+LSM6DSOSensor accGyr(&DEV_I2C);
 
 //Interrupts.
 volatile int mems_event = 0;
@@ -76,9 +76,9 @@ void setup() {
   //Interrupts.
   attachInterrupt(INT_1, INT1Event_cb, RISING);
 
-  accGyr = new LSM6DSOSensor (&DEV_I2C);
-  accGyr->Enable_X();
-  accGyr->Enable_Tilt_Detection(LSM6DSO_INT1_PIN);
+  accGyr.begin();
+  accGyr.Enable_X();
+  accGyr.Enable_Tilt_Detection(LSM6DSO_INT1_PIN);
 }
 
 void loop() {
@@ -86,7 +86,7 @@ void loop() {
   {
     mems_event=0;
     LSM6DSO_Event_Status_t status;
-    accGyr->Get_X_Event_Status(&status);
+    accGyr.Get_X_Event_Status(&status);
     if (status.TiltStatus)
     {
       // Led blinking.

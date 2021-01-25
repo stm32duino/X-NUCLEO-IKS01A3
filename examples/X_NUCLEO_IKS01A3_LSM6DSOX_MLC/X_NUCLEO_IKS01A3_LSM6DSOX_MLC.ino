@@ -61,7 +61,7 @@
 volatile int mems_event = 0;
 
 // Components
-LSM6DSOXSensor *AccGyr;
+LSM6DSOXSensor AccGyr(&DEV_I2C, LSM6DSOX_I2C_ADD_L);
 
 // MLC
 ucf_line_t *ProgramPointer;
@@ -89,10 +89,9 @@ void setup() {
   // Initialize I2C bus.
   DEV_I2C.begin();
 
-  
-  AccGyr = new LSM6DSOXSensor (&DEV_I2C, LSM6DSOX_I2C_ADD_L);
-  AccGyr->Enable_X();
-  AccGyr->Enable_G();
+  AccGyr.begin();
+  AccGyr.Enable_X();
+  AccGyr.Enable_G();
 
   /* Feed the program to Machine Learning Core */
   /* Activity Recognition Default program */  
@@ -103,7 +102,7 @@ void setup() {
   SerialPort.println(TotalNumberOfLine);
 
   for (LineCounter=0; LineCounter<TotalNumberOfLine; LineCounter++) {
-    if(AccGyr->Write_Reg(ProgramPointer[LineCounter].address, ProgramPointer[LineCounter].data)) {
+    if(AccGyr.Write_Reg(ProgramPointer[LineCounter].address, ProgramPointer[LineCounter].data)) {
       SerialPort.print("Error loading the Program to LSM6DSOX at line: ");
       SerialPort.println(LineCounter);
       while(1) {
@@ -125,7 +124,7 @@ void setup() {
   /* We need to wait for a time window before having the first MLC status */
   delay(3000);
 
-  AccGyr->Get_MLC_Output(mlc_out);
+  AccGyr.Get_MLC_Output(mlc_out);
   printMLCStatus(mlc_out[0]);
 }
 
@@ -133,10 +132,10 @@ void loop() {
   if (mems_event) {
     mems_event=0;
     LSM6DSOX_MLC_Status_t status;
-    AccGyr->Get_MLC_Status(&status);
+    AccGyr.Get_MLC_Status(&status);
     if (status.is_mlc1) {
       uint8_t mlc_out[8];
-      AccGyr->Get_MLC_Output(mlc_out);
+      AccGyr.Get_MLC_Output(mlc_out);
       printMLCStatus(mlc_out[0]);
     }
   }

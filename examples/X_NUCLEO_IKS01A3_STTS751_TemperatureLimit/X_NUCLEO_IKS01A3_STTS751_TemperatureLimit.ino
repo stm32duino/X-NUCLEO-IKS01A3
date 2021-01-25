@@ -62,7 +62,7 @@ uint8_t high = 0, low = 0;
 uint32_t previous_tick;
 float temperature = 0;
 
-STTS751Sensor *Temp;
+STTS751Sensor Temp(&DEV_I2C);
 
 void INT1Event_cb()
 {
@@ -81,13 +81,13 @@ void setup() {
   //Interrupts.
   attachInterrupt(INT_1, INT1Event_cb, FALLING);
 
-  Temp = new STTS751Sensor(&DEV_I2C);
-  Temp->Enable();
-  Temp->SetOutputDataRate(4.0f);
-  Temp->SetLowTemperatureThreshold(22.0f);
-  Temp->SetHighTemperatureThreshold(28.0f);
-  Temp->SetEventPin(1);
-  Temp->GetTemperatureLimitStatus(NULL, NULL, NULL);
+  Temp.begin();
+  Temp.Enable();
+  Temp.SetOutputDataRate(4.0f);
+  Temp.SetLowTemperatureThreshold(22.0f);
+  Temp.SetHighTemperatureThreshold(28.0f);
+  Temp.SetEventPin(1);
+  Temp.GetTemperatureLimitStatus(NULL, NULL, NULL);
 
   previous_tick=millis();
 }
@@ -97,7 +97,7 @@ void loop() {
   {
     mems_event=0;
     uint8_t highTemp = 0, lowTemp = 0;
-    Temp->GetTemperatureLimitStatus(&highTemp, &lowTemp, NULL);
+    Temp.GetTemperatureLimitStatus(&highTemp, &lowTemp, NULL);
     if (highTemp){
       high = 1;
       low = 0;
@@ -107,7 +107,7 @@ void loop() {
       high = 0;
     }
     
-    Temp->GetTemperature(&temperature);
+    Temp.GetTemperature(&temperature);
     // Led blinking.
     digitalWrite(LED_BUILTIN, HIGH);
     delay(100);
@@ -116,7 +116,7 @@ void loop() {
   uint32_t current_tick = millis();
   if ((current_tick - previous_tick) >= 2000){
     if (!high && !low){
-      Temp->GetTemperature(&temperature);
+      Temp.GetTemperature(&temperature);
     }
     SerialPort.print("Temp[C]: ");
     SerialPort.print(temperature, 2);

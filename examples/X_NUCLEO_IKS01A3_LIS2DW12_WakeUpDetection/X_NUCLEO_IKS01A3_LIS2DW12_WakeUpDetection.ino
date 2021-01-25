@@ -55,7 +55,7 @@
 #define SerialPort Serial
 
 // Components.
-LIS2DW12Sensor *accelero;
+LIS2DW12Sensor accelero(&DEV_I2C);
 
 //Interrupts.
 volatile int mems_event = 0;
@@ -75,18 +75,18 @@ void setup() {
   attachInterrupt(A3, INT1Event_cb, RISING);
 
   // Initlialize components.
-  accelero = new LIS2DW12Sensor(&DEV_I2C);
-  accelero->Enable_X();
+  accelero.begin();
+  accelero.Enable_X();
 
   // Enable Wake Up Detection.
-  accelero->Enable_Wake_Up_Detection();
+  accelero.Enable_Wake_Up_Detection();
 }
 
 void loop() {
   if (mems_event) {
     mems_event = 0;
     LIS2DW12_Event_Status_t status;
-    accelero->Get_Event_Status(&status);
+    accelero.Get_Event_Status(&status);
     if (status.WakeUpStatus)
     {
       // Led blinking.

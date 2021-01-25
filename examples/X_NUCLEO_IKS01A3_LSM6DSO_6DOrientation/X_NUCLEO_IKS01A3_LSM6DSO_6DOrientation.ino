@@ -55,7 +55,7 @@
 
 #define INT_1 4
 
-LSM6DSOSensor *accGyr;
+LSM6DSOSensor accGyr(&DEV_I2C);
 
 //Interrupts.
 volatile int mems_event = 0;
@@ -77,9 +77,9 @@ void setup() {
   //Interrupts.
   attachInterrupt(INT_1, INT1Event_cb, RISING);
 
-  accGyr = new LSM6DSOSensor (&DEV_I2C);
-  accGyr->Enable_X();
-  accGyr->Enable_6D_Orientation(LSM6DSO_INT1_PIN);
+  accGyr.begin();
+  accGyr.Enable_X();
+  accGyr.Enable_6D_Orientation(LSM6DSO_INT1_PIN);
 }
 
 void loop() {
@@ -87,7 +87,7 @@ void loop() {
   {
     mems_event=0;
     LSM6DSO_Event_Status_t status;
-    accGyr->Get_X_Event_Status(&status);
+    accGyr.Get_X_Event_Status(&status);
     if (status.D6DOrientationStatus)
     {
       sendOrientation();
@@ -113,12 +113,12 @@ void sendOrientation()
   uint8_t zl = 0;
   uint8_t zh = 0;
 
-  accGyr->Get_6D_Orientation_XL(&xl);
-  accGyr->Get_6D_Orientation_XH(&xh);
-  accGyr->Get_6D_Orientation_YL(&yl);
-  accGyr->Get_6D_Orientation_YH(&yh);
-  accGyr->Get_6D_Orientation_ZL(&zl);
-  accGyr->Get_6D_Orientation_ZH(&zh);
+  accGyr.Get_6D_Orientation_XL(&xl);
+  accGyr.Get_6D_Orientation_XH(&xh);
+  accGyr.Get_6D_Orientation_YL(&yl);
+  accGyr.Get_6D_Orientation_YH(&yh);
+  accGyr.Get_6D_Orientation_ZL(&zl);
+  accGyr.Get_6D_Orientation_ZH(&zh);
 
   if ( xl == 0 && yl == 0 && zl == 0 && xh == 0 && yh == 1 && zh == 0 )
   {
