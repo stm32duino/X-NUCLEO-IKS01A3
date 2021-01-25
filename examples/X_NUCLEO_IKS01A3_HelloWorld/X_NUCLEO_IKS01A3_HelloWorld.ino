@@ -59,12 +59,12 @@
 #define SerialPort Serial
 
 // Components
-LSM6DSOSensor *AccGyr;
-LIS2DW12Sensor *Acc2;
-LIS2MDLSensor *Mag;
-LPS22HHSensor *PressTemp;
-HTS221Sensor *HumTemp;
-STTS751Sensor *Temp3;
+LSM6DSOSensor AccGyr(&DEV_I2C);
+LIS2DW12Sensor Acc2(&DEV_I2C);
+LIS2MDLSensor Mag(&DEV_I2C);
+LPS22HHSensor PressTemp(&DEV_I2C);
+HTS221Sensor HumTemp(&DEV_I2C);
+STTS751Sensor Temp3(&DEV_I2C);
 
 void setup() {
   // Led.
@@ -75,21 +75,20 @@ void setup() {
   
   // Initialize I2C bus.
   DEV_I2C.begin();
-
   
-  AccGyr = new LSM6DSOSensor (&DEV_I2C);
-  AccGyr->Enable_X();
-  AccGyr->Enable_G();
-  Acc2 = new LIS2DW12Sensor (&DEV_I2C);
-  Acc2->Enable_X();
-  Mag = new LIS2MDLSensor (&DEV_I2C);
-  Mag->Enable();
-  PressTemp = new LPS22HHSensor(&DEV_I2C);
-  PressTemp->Enable();
-  HumTemp = new HTS221Sensor (&DEV_I2C);
-  HumTemp->Enable();
-  Temp3 = new STTS751Sensor (&DEV_I2C);
-  Temp3->Enable();
+  AccGyr.begin();
+  AccGyr.Enable_X();
+  AccGyr.Enable_G();
+  Acc2.begin();
+  Acc2.Enable_X();
+  Mag.begin();
+  Mag.Enable();
+  PressTemp.begin();
+  PressTemp.Enable();
+  HumTemp.begin();
+  HumTemp.Enable();
+  Temp3.begin();
+  Temp3.Enable();
 }
 
 void loop() {
@@ -101,31 +100,31 @@ void loop() {
 
   // Read humidity and temperature.
   float humidity = 0, temperature = 0;
-  HumTemp->GetHumidity(&humidity);
-  HumTemp->GetTemperature(&temperature);
+  HumTemp.GetHumidity(&humidity);
+  HumTemp.GetTemperature(&temperature);
 
   // Read pressure and temperature.
   float pressure = 0, temperature2 = 0;
-  PressTemp->GetPressure(&pressure);
-  PressTemp->GetTemperature(&temperature2);
+  PressTemp.GetPressure(&pressure);
+  PressTemp.GetTemperature(&temperature2);
 
   //Read temperature
   float temperature3 = 0;
-  Temp3->GetTemperature(&temperature3);
+  Temp3.GetTemperature(&temperature3);
 
   // Read accelerometer and gyroscope.
   int32_t accelerometer[3];
   int32_t gyroscope[3];
-  AccGyr->Get_X_Axes(accelerometer);
-  AccGyr->Get_G_Axes(gyroscope);
+  AccGyr.Get_X_Axes(accelerometer);
+  AccGyr.Get_G_Axes(gyroscope);
 
   //Read accelerometer
   int32_t accelerometer2[3];
-  Acc2->Get_X_Axes(accelerometer2);
+  Acc2.Get_X_Axes(accelerometer2);
 
   //Read magnetometer
   int32_t magnetometer[3];
-  Mag->GetAxes(magnetometer);
+  Mag.GetAxes(magnetometer);
 
   // Output data.
   SerialPort.print("| Hum[%]: ");

@@ -54,7 +54,7 @@
 #define SerialPort Serial
 
 // Components.
-LIS2DW12Sensor *accelero;
+LIS2DW12Sensor accelero(&DEV_I2C);
 
 //Interrupts.
 volatile int mems_event = 0;
@@ -77,11 +77,11 @@ void setup() {
   attachInterrupt(A3, INT1Event_cb, RISING);
 
   // Initlialize components.
-  accelero = new LIS2DW12Sensor(&DEV_I2C);
-  accelero->Enable_X();
+  accelero.begin();
+  accelero.Enable_X();
 
   // Enable 6D Orientation.
-  accelero->Enable_6D_Orientation();
+  accelero.Enable_6D_Orientation();
 }
 
 void loop() {
@@ -89,7 +89,7 @@ void loop() {
   {
     mems_event = 0;
     LIS2DW12_Event_Status_t status;
-    accelero->Get_Event_Status(&status);
+    accelero.Get_Event_Status(&status);
     if (status.D6DOrientationStatus)
     {
       // Send 6D Orientation
@@ -117,12 +117,12 @@ void sendOrientation()
   uint8_t zl = 0;
   uint8_t zh = 0;
   
-  accelero->Get_6D_Orientation_XL(&xl);
-  accelero->Get_6D_Orientation_XH(&xh);
-  accelero->Get_6D_Orientation_YL(&yl);
-  accelero->Get_6D_Orientation_YH(&yh);
-  accelero->Get_6D_Orientation_ZL(&zl);
-  accelero->Get_6D_Orientation_ZH(&zh);
+  accelero.Get_6D_Orientation_XL(&xl);
+  accelero.Get_6D_Orientation_XH(&xh);
+  accelero.Get_6D_Orientation_YL(&yl);
+  accelero.Get_6D_Orientation_YH(&yh);
+  accelero.Get_6D_Orientation_ZL(&zl);
+  accelero.Get_6D_Orientation_ZH(&zh);
   
   if ( xl == 1 && yl == 0 && zl == 0 && xh == 0 && yh == 0 && zh == 0 )
   {
